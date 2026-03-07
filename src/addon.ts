@@ -1,15 +1,15 @@
+import { setMaxListeners } from "node:events";
 import type { StreamHandlerArgs } from "stremio-addon-sdk";
 import { addonBuilder } from "stremio-addon-sdk";
-import { setMaxListeners } from "node:events";
 import { getCache, setCache } from "./cache/redis.js";
 import { config } from "./config.js";
 import { getTitleBasics } from "./imdb/index.js";
 import { parseStremioId, type ParsedStremioId } from "./parsing/stremioId.js";
 import type { ScrapeContext } from "./scrapers/context.js";
 import { scrapeEztvStreams } from "./scrapers/eztv.js";
+import { scrapeKickassStreams } from "./scrapers/kickass.js";
 import { scrapePirateBayStreams } from "./scrapers/pirateBay.js";
 import { scrapeTorrentGalaxyStreams } from "./scrapers/torrentGalaxy.js";
-import { scrapeKickassStreams } from "./scrapers/kickass.js";
 import { scrapeX1337xStreams } from "./scrapers/x1337x.js";
 import { scrapeYtsStreams } from "./scrapers/yts.js";
 import { extractQualityHint } from "./streams/quality.js";
@@ -17,7 +17,7 @@ import { BadRequestError, type Stream, type StreamResponse } from "./types.js";
 
 export const manifest = {
 	id: "barestreams",
-	version: "1.0.1",
+	version: "1.0.2",
 	name: "barestreams",
 	description:
 		"Lightweight Stremio addon for torrent streams from multiple public sources.",
