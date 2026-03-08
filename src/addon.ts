@@ -18,7 +18,7 @@ import { BadRequestError, type Stream, type StreamResponse } from "./types.js";
 
 export const manifest = {
 	id: "barestreams",
-	version: "1.0.2",
+	version: "1.1.0",
 	name: "barestreams",
 	description:
 		"Lightweight Stremio addon for torrent streams from multiple public sources.",
