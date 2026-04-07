@@ -1,17 +1,8 @@
 import * as http from "node:http";
-import { createAddonInterface } from "./addon.js";
-import { initRedis } from "./cache/redis.js";
-import { config } from "./config.js";
-import { enableHttp2IfAvailable } from "./httpClient.js";
-import { ensureImdbDatasets } from "./imdb/index.js";
-import "./scrapers/registerFlareSolverrPools.js";
-import { initFlareSolverrSessions } from "./scrapers/http.js";
-import { ensureTrackers } from "./trackers/index.js";
+import { getAddonInterface } from "./init.js";
 import { BadRequestError } from "./types.js";
 
-const PORT = 80;
-
-enableHttp2IfAvailable();
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 const sendJson = (
 	res: http.ServerResponse,
@@ -28,20 +19,7 @@ const sendJson = (
 };
 
 const start = async (): Promise<void> => {
-	try {
-		const redisClient = await initRedis();
-		if (!redisClient) {
-			console.info("No Redis URL configured, continuing without cache");
-		}
-	} catch {
-		console.info("Redis unavailable, continuing without cache");
-	}
-	if (config.flareSolverrUrl) {
-		await initFlareSolverrSessions();
-	}
-	await ensureImdbDatasets();
-	await ensureTrackers();
-	const addonInterface = createAddonInterface();
+	const addonInterface = await getAddonInterface();
 
 	const server = http.createServer(async (req, res) => {
 		if (!req.url) {
